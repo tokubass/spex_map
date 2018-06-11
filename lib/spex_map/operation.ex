@@ -1,16 +1,8 @@
 defmodule SpexMap.Operation do
   alias OpenApiSpex.{
-    Callback,
-    ExternalDocumentation,
-    MediaType,
     Parameter,
-    Reference,
     RequestBody,
-    Response,
-    Responses,
     Schema,
-    SecurityRequirement,
-    Server
   }
 
   def build(op) do
