@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  version: 0.0.3
+  title: FLY API
+servers:
+  - url: 'https://localhost:3000/api'
+paths:
+  /v1/foo/user:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                required:
+                    - url
+          description: OK
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        content:
+          type: string
+        cseq:
+          type: integer
+        from:
+          type: array
+          items:
+            type: string
+            pattern: '^[0-9]+'
+          example:
+            - '9044954413554896275'
+            - '8551160555686155840'
+        profile:
+          $ref: '#/components/schemas/Profile'
