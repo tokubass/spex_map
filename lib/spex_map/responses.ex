@@ -6,10 +6,14 @@ defmodule SpexMap.Responses do
           # spex側が複数content_typeに対応してない
           first_media_type = Map.keys(resp[:content]) |> hd
           schema = resp[:content][first_media_type][:schema]
+          schema = case Map.has_key?(schema, :"$ref") do
+            true -> struct!(OpenApiSpex.Reference, schema)
+            false -> SpexMap.Schema.build(schema)
+          end
 
           %{
             Atom.to_string(first_media_type) => %OpenApiSpex.MediaType{
-              schema: SpexMap.Schema.build(schema)
+              schema: schema
               # example: opts[:example], todo
               # examples: opts[:examples]
             }

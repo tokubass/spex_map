@@ -2,9 +2,6 @@ defmodule SpexMap.Schema do
   alias OpenApiSpex.{
     Schema,
     Reference,
-    Discriminator,
-    Xml,
-    ExternalDocumentation
   }
 
   def build(schema) do
@@ -150,7 +147,7 @@ defmodule SpexMap.Schema do
          {:ok, cast_tail} <- cast_properties(object_schema, rest, schemas) do
       {:ok, [{name, new_value} | cast_tail]}
     else
-      e -> {:error, "cast error! [#{name}: #{value}]"}
+      _e -> {:error, "cast error! [#{name}: #{value}]"}
     end
   end
 
