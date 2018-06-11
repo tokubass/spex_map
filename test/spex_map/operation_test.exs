@@ -3,23 +3,25 @@ defmodule SpexMap.OperationTest do
 
   describe "parameters" do
     test "normal" do
-      params = %{
-        "parameters" => [
-          %{
-            "in" => "query",
-            "name" => "user_id",
-            "schema" => %{"type" => "string"},
-            "required" => true
-          },
-          %{
-            "in" => "query",
-            "name" => "age",
-            "schema" => %{"type" => "integer"}
-          }
-        ]
-      } |>  SpexMap.Util.recursive_convert_to_atom()
-      
-     assert SpexMap.Operation.build_parameters(params[:parameters])  == [
+      params =
+        %{
+          "parameters" => [
+            %{
+              "in" => "query",
+              "name" => "user_id",
+              "schema" => %{"type" => "string"},
+              "required" => true
+            },
+            %{
+              "in" => "query",
+              "name" => "age",
+              "schema" => %{"type" => "integer"}
+            }
+          ]
+        }
+        |> SpexMap.Util.recursive_convert_to_atom()
+
+      assert SpexMap.Operation.build_parameters(params[:parameters]) == [
                %OpenApiSpex.Parameter{
                  in: :query,
                  name: :user_id,

@@ -14,11 +14,10 @@ defmodule SpexMap.Util do
   end
 
   @types ["boolean", "integer", "number", "string", "array", "object"]
-  @location  ["query", "path", "header", "cookie"]
+  @location ["query", "path", "header", "cookie"]
   @convert_target @types ++ @location
   def recursive_convert_to_atom(type)
-      when is_binary(type) and
-             type in @convert_target do
+      when is_binary(type) and type in @convert_target do
     String.to_atom(type)
   end
 
