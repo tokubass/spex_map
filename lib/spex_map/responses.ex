@@ -9,7 +9,7 @@ defmodule SpexMap.Responses do
 
           schema =
             case Map.has_key?(schema, :"$ref") do
-              true -> struct!(OpenApiSpex.Reference, schema)
+              true -> Map.fetch!(schema, :"$ref")
               false -> SpexMap.Schema.build(schema)
             end
 
