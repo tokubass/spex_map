@@ -8,11 +8,11 @@ defmodule SpexMap.Responses do
           schema = resp[:content][first_media_type][:schema]
 
           schema =
-            case Map.has_key?(schema, :"$ref") do
-              true -> Map.fetch!(schema, :"$ref")
-              false -> SpexMap.Schema.build(schema)
+            case Map.fetch(schema, :__struct__) do
+              {:ok, OpenApiSpex.Reference} -> schema
+              :error -> SpexMap.Schema.build(schema)
             end
-
+ 
           %{
             Atom.to_string(first_media_type) => %OpenApiSpex.MediaType{
               schema: schema
