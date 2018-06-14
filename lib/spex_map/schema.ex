@@ -1,7 +1,7 @@
 defmodule SpexMap.Schema do
   alias OpenApiSpex.{
     Schema,
-    Reference,
+    Reference
   }
 
   def build(schema) do
@@ -29,7 +29,7 @@ defmodule SpexMap.Schema do
   def build_properties(props) do
     for {key, val} <- props, into: %{} do
       case Map.has_key?(val, :"$ref") do
-        true -> {key, struct!(OpenApiSpex.Reference, val)}
+        true -> {key, val}
         false -> {key, struct!(OpenApiSpex.Schema, val)}
       end
     end

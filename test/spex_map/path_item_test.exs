@@ -1,5 +1,6 @@
 defmodule SpexMap.PathItemTest do
   use ExUnit.Case
+  alias SpexMap.Util
 
   test "path_item" do
     schema =
@@ -52,7 +53,7 @@ defmodule SpexMap.PathItemTest do
           }
         }
       }
-      |> SpexMap.Util.recursive_convert_to_atom()
+      |> Util.convert_all()
 
     path_item = SpexMap.PathItem.build(schema)
     assert path_item.get.responses |> Map.has_key?(200)

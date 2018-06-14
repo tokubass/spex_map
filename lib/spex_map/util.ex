@@ -1,25 +1,54 @@
 defmodule SpexMap.Util do
-  def recursive_convert_to_atom(schema) when is_map(schema) do
-    for {key, val} <- schema, into: %{} do
-      val = recursive_convert_to_atom(val)
+  def convert_all(schema) do
+    schema
+    |> SpexMap.Util.RecursiveConvert.Atom.convert()
+    |> SpexMap.Util.RecursiveConvert.ReferenceObject.convert()
+  end
 
-      {String.to_atom(key), val}
+  defmodule RecursiveConvert.Atom do
+    def convert(schema) when is_map(schema) do
+      for {key, val} <- schema, into: %{} do
+        val = convert(val)
+
+        {String.to_atom(key), val}
+      end
     end
-  end
 
-  def recursive_convert_to_atom(list) when is_list(list) do
-    for schema <- list do
-      recursive_convert_to_atom(schema)
+    def convert(list) when is_list(list) do
+      for schema <- list do
+        convert(schema)
+      end
     end
+
+    @types ["boolean", "integer", "number", "string", "array", "object"]
+    @location ["query", "path", "header", "cookie"]
+    @convert_target @types ++ @location
+    def convert(type) when is_binary(type) and type in @convert_target do
+      String.to_atom(type)
+    end
+
+    def convert(leaf), do: leaf
   end
 
-  @types ["boolean", "integer", "number", "string", "array", "object"]
-  @location ["query", "path", "header", "cookie"]
-  @convert_target @types ++ @location
-  def recursive_convert_to_atom(type)
-      when is_binary(type) and type in @convert_target do
-    String.to_atom(type)
-  end
+  defmodule RecursiveConvert.ReferenceObject do
+    def convert(%{"$ref": ref_path}) do
+      %OpenApiSpex.Reference{"$ref": ref_path}
+    end
 
-  def recursive_convert_to_atom(leaf), do: leaf
+    def convert(schema) when is_map(schema) do
+      for {key, val} <- schema, into: %{} do
+        case key do
+          key -> {key, convert(val)}
+        end
+      end
+    end
+
+    def convert(list) when is_list(list) do
+      for schema <- list do
+        convert(schema)
+      end
+    end
+
+    def convert(leaf), do: leaf
+  end
 end

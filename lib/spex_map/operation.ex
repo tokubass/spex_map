@@ -2,7 +2,7 @@ defmodule SpexMap.Operation do
   alias OpenApiSpex.{
     Parameter,
     RequestBody,
-    Schema,
+    Schema
   }
 
   def build(op) do

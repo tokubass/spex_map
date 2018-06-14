@@ -19,7 +19,7 @@ defmodule SpexMap.ResponsesTest do
         "404" => %{"description" => "not found"}
       }
 
-      responses = Util.recursive_convert_to_atom(responses)
+      responses = Util.convert_all(responses)
       schema = SpexMap.Schema.build(responses[:"200"][:content][:"application/json"][:schema])
 
       assert SpexMap.Responses.build(responses) == %{

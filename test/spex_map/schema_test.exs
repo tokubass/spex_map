@@ -1,5 +1,6 @@
 defmodule SpexMap.SchemaTest do
   use ExUnit.Case
+  alias SpexMap.Util
 
   test "schema" do
     schema = %{
@@ -11,12 +12,16 @@ defmodule SpexMap.SchemaTest do
           "items" => %{"pattern" => "^[0-9]+", "type" => "string"},
           "type" => "array"
         },
-        "profile" => %{"$ref" => "#/components/schemas/Profile"}
+        "profile" => %{"$ref" => "#/components/schemas/Profile"},
+        "profiles" => %{
+          "type" => "array",
+          "items" => %{"$ref" => "#/components/schemas/Profile"}
+        }
       },
       "type" => "object"
     }
 
-    schema = SpexMap.Util.recursive_convert_to_atom(schema)
+    schema = Util.convert_all(schema)
 
     assert SpexMap.Schema.build(schema) == %OpenApiSpex.Schema{
              type: :object,
@@ -28,7 +33,11 @@ defmodule SpexMap.SchemaTest do
                  items: %{pattern: "^[0-9]+", type: :string},
                  type: :array
                },
-               profile: %OpenApiSpex.Reference{"$ref": "#/components/schemas/Profile"}
+               profile: %OpenApiSpex.Reference{"$ref": "#/components/schemas/Profile"},
+               profiles: %OpenApiSpex.Schema{
+                 type: :array,
+                 items: %OpenApiSpex.Reference{"$ref": "#/components/schemas/Profile"}
+               }
              }
            }
   end

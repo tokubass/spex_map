@@ -3,10 +3,11 @@ defmodule SpexMap do
   Documentation for SpexMap.
   """
 
-  alias OpenApiSpex.{OpenApi, Operation, Reference, Schema, SchemaResolver}
+  alias OpenApiSpex.{OpenApi, Operation, Reference, Schema}
+  alias SpexMap.Util
 
   def load(spec) do
-    spec = SpexMap.Util.recursive_convert_to_atom(spec)
+    spec = Util.convert_all(spec)
 
     %OpenApiSpex.OpenApi{
       openapi: spec[:openapi],

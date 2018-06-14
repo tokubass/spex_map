@@ -1,5 +1,6 @@
 defmodule SpexMap.OperationTest do
   use ExUnit.Case
+  alias SpexMap.Util
 
   describe "parameters" do
     test "normal" do
@@ -19,7 +20,7 @@ defmodule SpexMap.OperationTest do
             }
           ]
         }
-        |> SpexMap.Util.recursive_convert_to_atom()
+        |> Util.convert_all()
 
       assert SpexMap.Operation.build_parameters(params[:parameters]) == [
                %OpenApiSpex.Parameter{
